@@ -1,0 +1,73 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+/lib/
+/lib64/
+!frontend/src/lib/**
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.pytest_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+ENV/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+.vercel/
+*.tsbuildinfo
+
+# Environment variables & secrets
+.env
+.env.*
+*.env
+*.env.*
+!.env.example
+!**/.env.example
+*.pem
+*.key
+*.cert
+*.crt
+
+# Application storage & databases
+**/storage/uploads/*
+!**/storage/uploads/.gitkeep
+backend/storage/
+storage/uploads/*
+!storage/uploads/.gitkeep
+docuflow.db
+*.db
+*.sqlite
+*.sqlite3
+*.db-shm
+*.db-wal
+
+# Logs & temporary files
+*.log
+logs/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
