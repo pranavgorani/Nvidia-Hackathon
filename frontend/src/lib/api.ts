@@ -1,4 +1,21 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+export function getBaseUrl(): string {
+  // If running on the server (SSR, Route handlers, or Next.js server components)
+  if (typeof window === "undefined") {
+    // In Vercel services mode, the service binding injects BACKEND_URL
+    return process.env.BACKEND_URL || process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+  }
+  // In the browser:
+  // If NEXT_PUBLIC_API_URL is explicitly set, use it.
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    return process.env.NEXT_PUBLIC_API_URL;
+  }
+  // Local development fallback if running on standard Next dev port without a reverse proxy rewrite
+  if (window.location.hostname === "localhost" && window.location.port === "3000") {
+    return "http://localhost:8000";
+  }
+  // Deployed / production relative path: rewrites route /api/(.*) directly to the backend service
+  return "";
+}
 
 let cachedToken: string | null = null;
 let cachedOrgId: string | null = null;
@@ -48,7 +65,8 @@ async function request(endpoint: string, options: RequestInit = {}) {
     headers["Content-Type"] = "application/json";
   }
 
-  const response = await fetch(`${API_BASE}${endpoint}`, {
+  const baseUrl = getBaseUrl();
+  const response = await fetch(`${baseUrl}${endpoint}`, {
     ...options,
     headers,
   });
@@ -98,6 +116,11 @@ export const api = {
     getTasks: (status?: string) => request(`/api/crm/tasks${status ? `?status=${status}` : ""}`),
     createTask: (data: any) => request("/api/crm/tasks", { method: "POST", body: JSON.stringify(data) }),
     updateTaskStatus: (taskId: string, status: string) => request(`/api/crm/tasks/${taskId}/status?status=${status}`, { method: "PUT" }),
+    addLeadNote: (leadId: string, content: string) =>
+      request(`/api/crm/leads/${leadId}/notes`, {
+        method: "POST",
+        body: JSON.stringify({ content }),
+      }),
   },
   documents: {
     upload: (file: File) => {

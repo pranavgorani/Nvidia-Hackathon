@@ -68,15 +68,7 @@ export default function CRMPage() {
   async function handleAddNote() {
     if (!selectedLead || !newNote.trim()) return;
     try {
-      await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"}/api/crm/leads/${selectedLead.id}/notes`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("docuflow_token")}`,
-          "X-Organization-Id": localStorage.getItem("docuflow_org_id") || ""
-        },
-        body: JSON.stringify({ content: newNote })
-      });
+      await api.crm.addLeadNote(selectedLead.id, newNote);
       setNewNote("");
       const details = await api.crm.getLead(selectedLead.id);
       setLeadDetails(details);

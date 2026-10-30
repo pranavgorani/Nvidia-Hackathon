@@ -92,7 +92,7 @@ def default_mock_ai(request):
         yield mock
         set_ai_provider(None)
 
-@pytest_asyncio.fixture(scope="session")
+@pytest_asyncio.fixture(scope="function")
 async def prepare_database():
     async with test_engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
